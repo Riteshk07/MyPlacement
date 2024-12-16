@@ -1,0 +1,340 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{%block title%}CareerBoost|Home{%endblock%}
+{% block style %}
+<style>
+    .counter {
+    padding: 20px 0;
+    border-radius: 5px;
+}
+
+.count-title {
+    font-size: 40px;
+    font-weight: normal;
+    margin-top: 10px;
+    margin-bottom: 0;
+    text-align: center;
+}
+
+.count-text {
+    font-size: 15px;
+    font-weight: normal;
+    margin-top: 10px;
+    margin-bottom: 0;
+    text-align: center;
+}
+
+.fa-2x {
+    margin: 0 auto;
+    float: none;
+    display: table;
+    color: #4ad1e5;
+}
+</style>
+
+{% endblock style %}
+{% block content %}
+<div class="row mt-3 mb-5">
+    <div class="col-12 mx-auto text-center">
+        <h1>Dashboard</h1>
+    </div>
+    <div class="col-12">
+        <div class="row text-center row-cols-2 mt-3">
+            <div class="col col-lg-2 mt-3">
+                <div class="counter bg-primary text-light" onclick="savedJobs()">
+                    <h2 class="timer count-title count-number" data-to="{{totalSJ}}" data-speed="1500" id="totalsj"></h2>
+                    <p class="count-text ">Saved Job</p>
+                </div>
+            </div>
+            <div class="col col-lg-2 mt-3">
+                <div class="counter bg-info" onclick="appliedJobs()">
+                    <h2 class="timer count-title count-number" data-to="{{totalaj}}" data-speed="1500"></h2>
+                    <p class="count-text ">Applied Jobs</p>
+                </div>
+            </div>
+            <div class="col col-lg-2 mt-3">
+                <div class="counter bg-warning" onclick="reffredJobs()">
+                    <h2 class="timer count-title count-number" data-to="{{totalref}}" data-speed="1500"></h2>
+                    <p class="count-text ">Reffred Role</p>
+                </div>
+            </div>
+            <div class="col col-lg-2 mt-3">
+                <div class="counter text-bg-danger" onclick="rejectedJobs()">
+                    <h2 class="timer count-title count-number" data-to="{{totalrj}}" data-speed="1500"></h2>
+                    <p class="count-text ">Rejected</p>
+                </div>
+            </div>
+            <div class="col col-lg-2 mt-3">
+                <div class="counter text-bg-success" onclick="shortlistedJobs()">
+                    <h2 class="timer count-title count-number" data-to="0" data-speed="1500"></h2>
+                    <p class="count-text ">Shortlisted</p>
+                </div>
+            </div>
+            <div class="col col-lg-2 mt-3">
+                <div class="counter text-bg-dark" onclick="selectedJobs()">
+                    <h2 class="timer count-title count-number" data-to="{{totalselt}}" data-speed="1500"></h2>
+                    <p class="count-text ">Selected</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="container mt-5">
+            <div class="col-12">
+                <h3>Your Jobs</h3>
+            </div>
+            <div class="col-12">
+                <div class="my-3 p-3 pb-2 bg-body rounded shadow-sm">
+                    <table class="table mt-2 " id = 'myTable'>
+                        <thead>
+                            <tr>
+                                <th scope="col" class="d-md-table-cell d-none">#</th>
+                                <th scope="col">Company</th>
+                                <th scope="col" class="d-md-table-cell d-none">Role</th>
+                                <th scope="col" class="d-md-table-cell d-none">Job Id</th>
+                                <th scope="col" class="d-md-table-cell d-none">Applied</th>
+                                <th scope="col" class="d-md-table-cell d-none">Reffered</th>
+                                <th scope="col" class="d-md-table-cell d-none">Rejected</th>
+                                <th scope="col" class="d-md-table-cell d-none">Selected</th>
+                                <th scope="col" class="d-md-table-cell d-none">Saved</th>
+                                <th scope="col" class="d-md-none d-table-cell">Others</th>
+                                <th scope="col" class="d-md-table-cell d-none">Date</th>
+                                <th scope="col" class="d-md-none d-table-cell">Saved</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {%for job in jobs%}
+                            <tr class="table-light">
+                                <th scope="row">
+                                    <img src="{{job.company_id.icon_url}}" alt="" width="50" class="mt-2 p-0">
+                                    <strong class="d-block d-md-none text-gray-dark pt-2">{{job.company_id.name}}</strong>
+                                    <p class="d-block d-md-none small lh-sm text-dark">{{job.position}}</p>
+                                    <p class="d-block d-md-none small lh-sm text-dark">Job Id:<span class="text-muted">{{job.job_id}}</span></p>
+                                    <p class="d-block d-md-none small lh-sm text-dark">Date:<span class="text-muted">{{job.date_updated}}</span></p>
+                                </th>
+                                <td class="d-md-block d-none">
+                                    <div>
+                                        <strong class="text-gray-dark">{{job.company_id.name}}</strong>
+                                    </div>
+                                </td>
+                                <td class="d-md-table-cell d-none">
+                                  <strong>{{job.position}}</strong>
+                                </td>
+
+                                
+                                <td class="d-md-table-cell d-none">
+                                    {{jid}}
+                                    <p class="small lh-sm text-muted">{{job.job_id}}</p>
+                                </td>
+                                <td class="d-md-table-cell d-none">
+                                    {% if job.id in applied_jobs %}
+                                    <input type="checkbox" name="" id="applied{{job.id}}" checked>
+                                    {% else %}                                    
+                                    <input type="checkbox" name="" id="applied{{job.id}}">
+                                    {% endif %}
+                                </td>
+                                <td class="d-md-none d-table-cell">
+                                    <div class="text-center">
+                                        
+                                        {% if job.id in applied_jobs %}
+                                        Applied: <input type="checkbox" name="" id="applied1{{job.id}}" checked>
+                                        {% else %}                          
+                                        Applied: <input type="checkbox" name="" id="applied1{{job.id}}" value="">
+                                        {% endif %}
+                                      </div>
+                                    <div class="text-center">
+                                        
+                                        {% if job.id in rejected_jobs %}
+                                        Rejected: <input type="checkbox" name="" id="rejected1{{job.id}}" checked>
+                                        {% else %}                          
+                                        Rejected: <input type="checkbox" name="" id="rejected1{{job.id}}">
+                                        {% endif %}
+                                    </div>
+                                    <div class="text-center mt-2">
+                                        {% if job.id in selected_jobs %}
+                                        Rejected: <input type="checkbox" name="" id="selected1{{job.id}}" checked>
+                                        {% else %}  
+                                        Selected: <input type="checkbox" name="" id="selected1{{job.id}}">
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <td class="d-md-table-cell d-none">
+                                    {% if job.id in reffered_jobs %}
+                                    <input type="checkbox" name="" id="reffered{{job.id}}" checked>
+                                    {% else %}
+                                    <input type="checkbox" name="reffered" id="reffered{{job.id}}">
+                                    {% endif %}
+                                </td>
+                                <td class="d-md-table-cell d-none">
+                                    {% if job.id in rejected_jobs %}
+                                    <input type="checkbox" name="" id="rejected{{job.id}}" checked>
+                                    {% else %}                          
+                                    <input type="checkbox" name="" id="rejected{{job.id}}">
+                                    {% endif %}
+                                </td>
+                                <td class="d-md-table-cell d-none">
+                                    {% if job.id in selected_jobs %}
+                                    <input type="checkbox" name="" id="selected{{job.id}}" checked>
+                                    {% else %}  
+                                    <input type="checkbox" name="" id="selected{{job.id}}">
+                                    {% endif %}
+                                </td>
+                                <td>
+    
+                                    <div class="mt-2 text-center">
+                                        {% if job.id in Saved_jobs %}
+                                        <i onclick="saveJob({{job.id}})" id="bookmarkIcom{{job.id}}" class="fa-solid fa-bookmark fa-lg" aria-hidden="true"></i>   
+                                        {% else %}
+                                        <i onclick="saveJob({{job.id}})" id="bookmarkIcom{{job.id}}" class="fa-regular fa-bookmark fa-lg" aria-hidden="true"></i>  
+                                        {% endif %}    
+                                    </div>
+                                </td>
+                                <td class="d-md-table-cell d-none">
+                                    {{job.date_updated}}
+                                </td>
+                            </tr>
+                            {%endfor%}
+                        </tbody>
+    
+                    </table>
+                    <!-- Modal -->
+                    
+                </div>
+                <div class="col-12">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block myscript %}
+
+<script>
+    (function ($) {
+	$.fn.countTo = function (options) {
+		options = options || {};
+		
+		return $(this).each(function () {
+			// set options for current element
+			var settings = $.extend({}, $.fn.countTo.defaults, {
+				from:            $(this).data('from'),
+				to:              $(this).data('to'),
+				speed:           $(this).data('speed'),
+				refreshInterval: $(this).data('refresh-interval'),
+				decimals:        $(this).data('decimals')
+			}, options);
+			
+			// how many times to update the value, and how much to increment the value on each update
+			var loops = Math.ceil(settings.speed / settings.refreshInterval),
+				increment = (settings.to - settings.from) / loops;
+			
+			// references & variables that will change with each update
+			var self = this,
+				$self = $(this),
+				loopCount = 0,
+				value = settings.from,
+				data = $self.data('countTo') || {};
+			
+			$self.data('countTo', data);
+			
+			// if an existing interval can be found, clear it first
+			if (data.interval) {
+				clearInterval(data.interval);
+			}
+			data.interval = setInterval(updateTimer, settings.refreshInterval);
+			
+			// initialize the element with the starting value
+			render(value);
+			
+			function updateTimer() {
+				value += increment;
+				loopCount++;
+				
+				render(value);
+				
+				if (typeof(settings.onUpdate) == 'function') {
+					settings.onUpdate.call(self, value);
+				}
+				
+				if (loopCount >= loops) {
+					// remove the interval
+					$self.removeData('countTo');
+					clearInterval(data.interval);
+					value = settings.to;
+					
+					if (typeof(settings.onComplete) == 'function') {
+						settings.onComplete.call(self, value);
+					}
+				}
+			}
+			
+			function render(value) {
+				var formattedValue = settings.formatter.call(self, value, settings);
+				$self.html(formattedValue);
+			}
+		});
+	};
+	
+	$.fn.countTo.defaults = {
+		from: 0,               // the number the element should start at
+		to: 0,                 // the number the element should end at
+		speed: 1000,           // how long it should take to count between the target numbers
+		refreshInterval: 100,  // how often the element should be updated
+		decimals: 0,           // the number of decimal places to show
+		formatter: formatter,  // handler for formatting the value before rendering
+		onUpdate: null,        // callback method for every time the element is updated
+		onComplete: null       // callback method for when the element finishes updating
+	};
+	
+	function formatter(value, settings) {
+		return value.toFixed(settings.decimals);
+	}
+}(jQuery));
+
+jQuery(function ($) {
+  // custom formatting example
+  $('.count-number').data('countToOptions', {
+	formatter: function (value, options) {
+	  return value.toFixed(options.decimals).replace(/\B(?=(?:\d{3})+(?!\d))/g, ',');
+	}
+  });
+  
+  // start all the timers
+  $('.timer').each(count);  
+  
+  function count(options) {
+	var $this = $(this);
+	options = $.extend({}, options || {}, $this.data('countToOptions') || {});
+	$this.countTo(options);
+  }
+});
+
+function saveJob(id){
+    var id = id;
+    console.log(id);
+    let ap =(document.getElementById('applied'+id)).checked || (document.getElementById('applied1'+id)).checked ;
+    let rj =(document.getElementById('rejected'+id)).checked || (document.getElementById('rejected1'+id)).checked ;
+    let selt =(document.getElementById('selected'+id)).checked || (document.getElementById('selected1'+id)).checked;
+    let ref = document.getElementById('reffered'+id).checked;
+    
+    $.ajax({
+        url : "{% url 'save_job' %}",
+        type : 'get',
+        data : {jobid:id, applied:ap, rejected:rj, selected:selt, reffered:ref},
+        success:function(data){
+            if(data.status =='save'){
+                $('#bookmarkIcom'+id).removeClass('fa-regular');
+                $('#bookmarkIcom'+id).addClass('fa-solid');
+            }
+            else{
+                $('#bookmarkIcom'+id).removeClass('fa-solid');
+                $('#bookmarkIcom'+id).addClass('fa-regular');   
+            }
+            let dt = $("#totalsj").html(data.total);
+        }
+    });
+}
+</script>
+{% endblock myscript %}

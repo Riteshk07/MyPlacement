@@ -1,0 +1,88 @@
+{% extends 'main/base.html' %}
+{%block title%}CareerBoost|Sign Up{%endblock%}
+{% block style %}
+<style>
+  .errorlist{
+    color: red;
+    font-size: 15px;
+  }
+</style>
+{% endblock style %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="col-md-12">
+        <h1>Register</h1><br>
+        <form method="post">{% csrf_token %}
+
+              <div class="row">
+                <div class="col fs-5 mt-2">
+                  {{form.fname.label_tag}}
+                  {{form.fname}}
+                  {% for error in form.fname.errors %}
+                      <span class="errorlist">{{error}}</span>
+                  {% endfor %}    
+                </div>
+                <div class="col fs-5 mt-2">
+                  {{form.lname.label_tag}}
+                  {{form.lname}}
+                  {% for error in form.lname.errors %}
+                      <span class="errorlist">{{error}}</span>
+                  {% endfor %}
+                </div>
+              </div>
+
+              {% for field in form %}
+              {% if field.html_name != 'fname' and field.html_name != 'lname' %}
+                  <div class="form-group fs-5 mt-2">
+                      {{field.label_tag}}  {{field}}
+                      {% if field.html_name == 'email' %}
+                      <span class="errorlist" style="font-size: 12px; font-weight: bold;" id="result"></span>
+                      {% endif %}
+                      {% for error in field.errors  %}
+                          <span class="errorlist">{{error}}</span>
+                      {% endfor %}
+                  </div>
+              {% endif %}
+              {% endfor %}
+              {% if form.non_field_errors %}
+                {% for error in form.non_field_errors %}
+                    <p class="text-danger">{{ error }}</p>
+                {% endfor %}
+              {% endif %}
+
+              <div class="d-grid gap-2 col-3 fs-5 mt-2">
+                <input type="submit" id="reg_id" class="btn btn-success mt-3" disabled value="Register">
+              </div>
+        </form>
+        <div class="fs-5 mt-2">
+          
+        Already Have Account, <a class="mt-2" role="button" href="/user/login">Login Here..</a>
+        </div>
+    </div>
+</div>
+<script>
+  function checkuser(){
+    let un = document.getElementById("id_email").value;
+    $.ajax({
+      url : "{% url 'check_user' %}",
+      type : "get",
+      data: {usern :un},
+      success: function(data){
+        if (data=="User is Valid"){
+          $("#result").removeClass("errorlist");
+          $("#result").addClass("text-success");
+          $("#result").html(data);
+          $("#reg_id").attr("disabled",false);
+        }else{
+          $("#result").removeClass("text-success");
+          $("#result").addClass("errorlist");
+          $("#result").html(data);
+          $("#reg_id").attr("disabled",true);
+        }
+      }
+    })
+
+  }
+</script>
+{% endblock content %}

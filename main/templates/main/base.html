@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Font awesome-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- <link rel="stylesheet" href="{% static 'main/css/all.min.css' %}"> -->
+    <link href="https://fonts.googleapis.com/css2?family=Akaya+Telivigala&family=Bebas+Neue&family=Bungee&family=Lobster&family=Zen+Dots&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'main/css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'main/css/core.css' %}">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+
+    <title>{%block title%}MyLife{%endblock%}</title>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-134716928-4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-134716928-4');
+    </script>
+    <!-- Custom Css -->
+    <link rel="stylesheet" type="text/css" href="{%static 'main/css/sidebars.css'%}">
+    {% block style %}{% endblock style %}
+</head>
+
+<body>
+    
+        
+    <main class="d-flex flex-nowrap">
+        <div class="d-md-flex flex-column bg-light flex-shrink-0 p-3 d-none" style="width: 280px;">
+            {% include 'main/sidebar.html' %}
+        </div>
+        <div class="b-example-divider b-example-vr" style="width: 0px;"></div>
+        <div>
+            <div class="container-fluid d-md-none d-block">
+                <ul class="nav nav-pills nav-fill m-2">
+                    <li class="nav-item">
+                        <a class="nav-link {{home}}" aria-current="page" href="{% url 'home' %}">
+                            <i class="fa fa-home" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{newJobs}}" href="/placement/newJobs">
+                            <i class="fa fa-briefcase" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{savedCompany}}" href="/placement/savedCompany">
+                            <i class="fa fa-bookmark" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{allCom}}" href="/placement/allCompany">
+                            <i class="fa fa-building" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {{addNew}}" href="/placement/addNew">
+                            <i class="fa fa-plus-square" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">
+                            <i class="fa-solid fa-right-from-bracket" aria-hidden="true"></i>
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="container-fluid px-4"  style="overflow-y: scroll; height:100%;">
+                {% block content %}Error{% endblock content %}
+            </div>
+        </div>
+    </main>
+    
+    <!-- <div class="mb-5"></div> -->
+    <script src="{% static 'main/js/jquary.js' %}"></script>
+    <script src="{% static 'main/js/poper.js' %}"></script>
+    <script src="{% static 'main/js/all.min.js' %}"></script>
+    <script src="{% static 'main/js/base.js' %}"></script>
+    <script src="{%static 'main/js/sidebars.js'%}" type="text/javascript"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script> -->
+    {% block myscript %}{% endblock myscript %}
+</body>
+
+</html>

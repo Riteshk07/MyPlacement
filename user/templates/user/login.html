@@ -1,0 +1,35 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{%block title%}CareerBoost|Login{%endblock%}
+{% block content %}
+<div class="container row">
+
+    .
+    {% if error %}
+        <div class="alert alert-danger" role="alert">
+          Email or Password is Incurrect. Please Login Again.
+        </div>
+    {% endif %}
+    <div class="mt-5 col-md-12">
+        <h1>Login</h1>
+        <form method="post" action="/user/login/">{% csrf_token %}
+
+          <div class="form-group">
+            <label for="email">Email address</label>
+            <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+          </div>
+          <div class="form-group">
+            <label for="pass">Password</label>
+            <input type="password" class="form-control" name="password" id="pass" placeholder="Password">
+          </div>
+            <button class="btn btn-success mt-2" type="submit">Login</button>
+        </form>
+        <span class="mt-2">Don't Have Account, <a class="" role="button" href="{% url 'signup' %}">Register Here..</a></span>
+        </form>
+
+    </div>
+    <div class="col-sm-12">
+      <p></p>
+    </div>
+</div>
+{% endblock content %}

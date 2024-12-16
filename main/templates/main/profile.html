@@ -1,0 +1,101 @@
+{% extends 'main/base.html' %}
+{% load static %}
+{%block title%}CareerBoost|Profile{%endblock%}
+{% block content %}
+<div class="row mt-5 mb-5">
+    <div class="col-12 mb-5">
+        <h2>Profile</h2>
+        <hr>
+    </div>
+    
+     
+    <div class="row">
+        <div class="col-sm-12">
+            {% if user.is_authenticated %}
+            <div class="row fs-5 row-cols-2">
+                <div class="mt-3 col-6 text-end">
+                    Name :
+                </div>
+                <div class="mt-3 col-6" id="nmlm">
+                    {{ user.first_name }} {{ user.last_name }}
+                </div>
+                
+            </div>
+            <div class="row fs-5 row-cols-2">
+                <div class="mt-3 col-6 text-end">
+                    Email :
+                </div>
+                <div class="mt-3 col-6">
+                    {{ user.email }}
+                    
+                </div>
+            </div>
+            <div class="row fs-5 row-cols-2">
+                <div class="mt-3 col-6 text-end">
+                    Change Profile Picture :
+                </div>
+                <div class="mt-3 col-6">
+                    <input type="file" name="" id="">
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-12 text-center mt-5">
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            Update Name
+        </button>
+        
+        <!-- Modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Update Name</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST">{% csrf_token %}
+                    <div class="modal-body text-start">
+                        <div>
+                            <label for="changename">First Name : </label>
+                            <input type="text" id="changefname" class="form-control">
+                        </div>
+                        <div>
+                            <label for="changename">Last Name : </label>
+                            <input type="text" id="changelname" class="form-control">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="nmCancel" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="save_name">Save Changes</button>
+                </div>
+                </form>
+            </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+{% block myscript %}
+<script>
+    $("#save_name").click(function(){
+        let new_fname = $("#changefname").val();
+        let new_lname = $("#changelname").val();
+        let csr = $("input[name=csrfmiddlewaretoken").val();
+        $.ajax({
+            url : "{% url 'changeName' %}",
+            method: 'POST',
+            data : {nfName : new_fname, nlName : new_lname, csrfmiddlewaretoken:csr},
+            success: function(data){
+                console.log(data);
+                let fulname = data.fname+" "+ data.lname;
+                $("#user_name").html(fulname);
+                $("#nmlm").html(fulname);
+                $("#nmCancel").trigger('click');
+            }
+        })
+    })
+</script>
+{% endblock myscript %}
